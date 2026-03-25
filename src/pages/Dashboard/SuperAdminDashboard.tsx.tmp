@@ -1,0 +1,23 @@
+/**
+ * SuperAdmin Dashboard
+ * System-wide statistics and management
+ */
+
+import { FC, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import StatCard from '../../components/dashboard/StatCard';
+import { useAuth } from '../../hooks/useAuth';
+
+// TODO: Replace with API call to dashboardService.getSuperAdminStats()
+const mockSuperAdminStats = {
+  total_institutions: 24,
+  active_institutions: 22,
+  inactive_institutions: 2,
+  total_users: 1250,
+  total_students: 850,
+  total_educators: 180,
+  system_health: 94,
+  last_updated: new Date().toISOString(),
+};
+
+const SuperAdminDashboard: FC = () => {

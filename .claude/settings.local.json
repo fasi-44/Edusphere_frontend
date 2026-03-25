@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Bash(cat:*)",
+      "Bash(powershell:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(printf:*)",
+      "Bash(printf \"\\\\n2. useEffect import: \")",
+      "Bash(tree:*)",
+      "Bash(findstr:*)",
+      "Bash(student)",
+      "Bash(parent)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find:*)",
+      "Bash(psql:*)",
+      "Bash(redux)",
+      "Bash(zustand \")",
+      "Bash(npx vite build:*)",
+      "Bash(python -c:*)"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+export { default as SyllabusList } from './SyllabusList';
+export { default as SyllabusDetail } from './SyllabusDetail';
+export { default as SyllabusAnalytics } from './SyllabusAnalytics';
+export { default as SyllabusFormModal } from './SyllabusFormModal';
+export { default as LessonFormModal } from './LessonFormModal';
+export { default as TopicFormModal } from './TopicFormModal';
+export { default as SubtopicFormModal } from './SubtopicFormModal';
+export { default as StudentSyllabusView } from './StudentSyllabusView';
+export { default as StudentSyllabusDetail } from './StudentSyllabusDetail';
