@@ -4,12 +4,11 @@
  */
 
 import { FC, useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 import toast from 'react-hot-toast';
 import { PageHeader, FormField, FormSelect, LoadingSpinner, EmptyState, PrintActions } from '../../components';
 import { academicsService } from '../../services/modules/academicsService';
 import { useAuthStore } from '../../stores/authStore';
-import { IStudentProgress } from '../../types/index';
 import { generateAnnualProgressReportPdf } from '../../prints';
 import type { AnnualReportData, SchoolData, PdfAction } from '../../prints';
 
@@ -31,7 +30,6 @@ interface ExamResult {
 
 const AnnualProgressReport: FC = () => {
     const { studentId } = useParams<{ studentId: string }>();
-    const navigate = useNavigate();
     const { user } = useAuthStore();
     const [studentInfo, setStudentInfo] = useState<any>(null);
     const [examTypes, setExamTypes] = useState<any[]>([]);
@@ -206,7 +204,7 @@ const AnnualProgressReport: FC = () => {
                     {/* Exam Results */}
                     {filteredResults.length > 0 ? (
                         <div className="space-y-6">
-                            {filteredResults.map((result, index) => (
+                            {filteredResults.map((result) => (
                                 <div key={result.exam_id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                                     {/* Exam Header */}
                                     <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4">

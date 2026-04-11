@@ -278,7 +278,7 @@ export const loadPdfFonts = async (): Promise<void> => {
     if (fontsLoaded) return;
     try {
         const pdfFontsModule = await import('pdfmake/build/vfs_fonts');
-        const pdfMake = (await import('pdfmake/build/pdfmake')).default;
+        const pdfMake: any = (await import('pdfmake/build/pdfmake')).default;
 
         if (pdfFontsModule.default && (pdfFontsModule.default as any).pdfMake) {
             pdfMake.vfs = (pdfFontsModule.default as any).pdfMake.vfs;

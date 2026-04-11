@@ -22,7 +22,8 @@
       "Bash(redux)",
       "Bash(zustand \")",
       "Bash(npx vite build:*)",
-      "Bash(python -c:*)"
+      "Bash(python -c:*)",
+      "Read(//tmp/**)"
     ]
   }
 }

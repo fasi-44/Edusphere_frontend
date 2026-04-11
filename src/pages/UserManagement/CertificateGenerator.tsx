@@ -91,7 +91,7 @@ const CertificateGenerator: FC = () => {
             schoolAddress: user?.school_address || '',
             schoolPhone: user?.school_phone || '',
             schoolEmail: user?.school_email || '',
-            schoolLogo: user?.school_logo || '',
+            logo: user?.school_logo || '',
             generatedBy: user?.full_name || user?.username || 'Admin',
         };
     };
@@ -122,7 +122,7 @@ const CertificateGenerator: FC = () => {
                         issue_date: formData.issueDate,
                         reason: formData.reason || 'N/A',
                         remarks: formData.remarks,
-                        academic_year: user?.academic_year?.year || 'N/A',
+                        academic_year: (user?.academic_year as any)?.year || 'N/A',
                         last_attended_date: formData.lastAttendedDate,
                         total_working_days: formData.totalWorkingDays ? parseInt(formData.totalWorkingDays) : undefined,
                         days_present: formData.daysPresent ? parseInt(formData.daysPresent) : undefined,
@@ -144,7 +144,7 @@ const CertificateGenerator: FC = () => {
                         issue_date: formData.issueDate,
                         purpose: formData.purpose || '',
                         remarks: formData.remarks,
-                        academic_year: user?.academic_year?.year || 'N/A',
+                        academic_year: (user?.academic_year as any)?.year || 'N/A',
                     };
 
                     await generateBonafideCertificatePdf(bonafideData, schoolData, 'print');
@@ -157,6 +157,11 @@ const CertificateGenerator: FC = () => {
                         return;
                     }
 
+                    const qrPayload = JSON.stringify({
+                        student_id: student.id,
+                        school: user?.skid || '',
+                    });
+
                     const idCardData: StudentIDCardData = {
                         student_name: student.full_name,
                         roll_number: student.profile?.roll_no || 'N/A',
@@ -168,7 +173,8 @@ const CertificateGenerator: FC = () => {
                         issue_date: formData.issueDate,
                         valid_until: formData.validUntil,
                         emergency_contact: formData.emergencyContact,
-                        academic_year: user?.academic_year?.year || 'N/A',
+                        academic_year: (user?.academic_year as any)?.year || 'N/A',
+                        qr_data: qrPayload,
                     };
 
                     await generateStudentIDCardPdf(idCardData, schoolData, 'print');

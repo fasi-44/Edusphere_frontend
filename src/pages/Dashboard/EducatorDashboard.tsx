@@ -365,7 +365,7 @@ const EducatorDashboard: FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {getWeekTableRows().map((row) => (
+                                        {getWeekTableRows().map((row: any) => (
                                             <tr key={row.index} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
                                                 <td className="px-3 py-3 border-b border-gray-100 dark:border-gray-700">
                                                     <div className="text-sm font-semibold text-gray-900 dark:text-white">

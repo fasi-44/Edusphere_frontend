@@ -5,7 +5,6 @@
 
 import { getApiClient } from '../api/client';
 import {
-    SuperAdminStats,
     AdministratorStats,
     EducatorStats,
     LearnerStats,

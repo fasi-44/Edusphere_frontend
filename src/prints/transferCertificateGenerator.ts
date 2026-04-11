@@ -222,7 +222,7 @@ export const generateTransferCertificatePdf = async (
         pageSize: 'A4',
         pageOrientation: 'portrait',
         pageMargins: [40, 140, 40, 60],
-        header: (currentPage: number, pageCount: number) => {
+        header: () => {
             return getReportHeader(
                 schoolData,
                 'Transfer Certificate',

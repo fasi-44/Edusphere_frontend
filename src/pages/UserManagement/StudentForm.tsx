@@ -40,7 +40,7 @@ const StudentForm: FC<IStudentFormProps> = ({ initialData, mode: propMode = 'cre
     const [showParentModal, setShowParentModal] = useState(false);
     const [showParentReassign, setShowParentReassign] = useState(false);
     const [photoPreview, setPhotoPreview] = useState<string>('');
-    const [photoFile, setPhotoFile] = useState<File | null>(null);
+    const [, setPhotoFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
         // Base user fields
         username: '',

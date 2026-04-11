@@ -47,10 +47,15 @@ export interface AuthUser {
   school_id: number;
   school_code: string;
   school_name: string;
+  school_logo?: string;
+  school_address?: string;
+  school_phone?: string;
+  school_email?: string;
   skid: string;
   school_user_id: number;
   role_obj: RoleObj;
   academicYear?: string | number;
+  academic_year?: string | number;
   current_academic_year: AcademicYear;
   academic_years: AcademicYear[];
   created_at: string;

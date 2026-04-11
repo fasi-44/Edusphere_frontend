@@ -11,7 +11,6 @@ import {
     getSignatureSection,
     commonPdfStyles,
     loadPdfFonts,
-    formatDate,
 } from './HeaderAndFooterComponent';
 import type { SchoolData, PdfAction } from './printTypes';
 
@@ -344,7 +343,7 @@ export const generateAnnualProgressReportPdf = async (
         pageSize: 'A4',
         pageOrientation: orientation,
         pageMargins: [40, 140, 40, 60],
-        header: (currentPage: number, pageCount: number) => {
+        header: () => {
             return getReportHeader(
                 schoolData,
                 reportTitle,

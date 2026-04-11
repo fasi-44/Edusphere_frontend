@@ -114,6 +114,10 @@ const SyllabusAnalytics = lazy(() => import("./pages/SyllabusManagement").then(m
 const StudentSyllabusView = lazy(() => import("./pages/SyllabusManagement").then(m => ({ default: m.StudentSyllabusView })));
 const StudentSyllabusDetail = lazy(() => import("./pages/SyllabusManagement").then(m => ({ default: m.StudentSyllabusDetail })));
 
+// Lazy loaded Bus Management
+const BusScanDashboard = lazy(() => import("./pages/BusManagement").then(m => ({ default: m.BusScanDashboard })));
+const BusScanReport = lazy(() => import("./pages/BusManagement").then(m => ({ default: m.BusScanReport })));
+
 // Lazy loaded Assignment Management
 const Assignments = lazy(() => import("./pages/AssignmentManagement").then(m => ({ default: m.Assignments })));
 const AssignmentReview = lazy(() => import("./pages/AssignmentManagement").then(m => ({ default: m.AssignmentReview })));
@@ -320,6 +324,11 @@ function AppContent() {
                         <Route path="/finance/expenses" element={guarded('/finance/expenses', <ExpenseList />)} />
                         <Route path="/finance/salary-setup" element={guarded('/finance/salary-setup', <SalarySetup />)} />
                         <Route path="/finance/salary-payments" element={guarded('/finance/salary-payments', <SalaryPayments />)} />
+
+                        {/* Bus Management Routes */}
+                        <Route path="/bus-scan" element={guarded('/bus-scan', <BusScanDashboard />)} />
+                        <Route path="/bus-scan/scan" element={guarded('/bus-scan/scan', <BusScanDashboard />)} />
+                        <Route path="/bus-scan/report" element={guarded('/bus-scan/report', <BusScanReport />)} />
 
                         {/* Assignment Management Routes */}
                         <Route path="/assignments" element={guarded('/assignments', <Assignments />)} />

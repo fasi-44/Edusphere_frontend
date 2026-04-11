@@ -43,7 +43,6 @@ export const generateTimetablePdf = async (
         sectionName,
         academicYear,
         semester,
-        configuration,
         timeSlots,
         entries,
         isDraft,

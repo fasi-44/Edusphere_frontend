@@ -45,8 +45,6 @@ const ColumnPicker: FC<ColumnPickerProps> = ({
     return (
         <div className="flex flex-wrap gap-4 justify-center">
             {layout.map((side, sideIdx) => {
-                const sideStartCol = colOffset + 1;
-                const sideEndCol = colOffset + side.columns;
                 const sideCols = Array.from({ length: side.columns }, (_, i) => colOffset + i + 1);
                 colOffset += side.columns;
 

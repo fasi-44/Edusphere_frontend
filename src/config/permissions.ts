@@ -64,6 +64,10 @@ export enum Permission {
   // Assignments
   VIEW_ASSIGNMENTS = 'view_assignments',
   MANAGE_ASSIGNMENTS = 'manage_assignments',
+
+  // Bus Scan
+  VIEW_BUS_SCAN = 'view_bus_scan',
+  MANAGE_BUS_SCAN = 'manage_bus_scan',
 }
 
 // ──────────────────────────────────────────────
@@ -171,6 +175,11 @@ export const ROUTE_PERMISSION_MAP: Record<string, RoutePermissionConfig> = {
   '/assignments': { permission: Permission.MANAGE_ASSIGNMENTS },
   '/assignments/:id/review': { permission: Permission.MANAGE_ASSIGNMENTS },
   '/assignments/my-assignments': { permission: Permission.VIEW_ASSIGNMENTS },
+
+  // Bus Scan
+  '/bus-scan': { permission: Permission.MANAGE_BUS_SCAN },
+  '/bus-scan/scan': { permission: Permission.MANAGE_BUS_SCAN },
+  '/bus-scan/report': { permission: Permission.VIEW_BUS_SCAN },
 
   // Syllabus
   '/syllabus': { permission: Permission.MANAGE_SYLLABUS },
@@ -312,6 +321,14 @@ export const SIDEBAR_PERMISSION_MAP: Record<string, SidebarGroupPermissionConfig
       '/syllabus/my-progress': Permission.VIEW_SYLLABUS_AND_PROGRESS,
     },
     excludeFromFullAccess: ['/syllabus/my-progress'],
+  },
+  'Bus Management': {
+    groupPermissions: [Permission.VIEW_BUS_SCAN, Permission.MANAGE_BUS_SCAN],
+    itemPermissions: {
+      '/bus-scan': Permission.MANAGE_BUS_SCAN,
+      '/bus-scan/scan': Permission.MANAGE_BUS_SCAN,
+      '/bus-scan/report': Permission.VIEW_BUS_SCAN,
+    },
   },
   'Finance Management': {
     groupPermissions: [Permission.VIEW_FEES, Permission.VIEW_EXPENSES],

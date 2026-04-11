@@ -12,22 +12,11 @@ interface IClassListParams {
 }
 
 
-interface IClassListResponse {
-    data: IClass[];
-    meta: {
-        total: number;
-        page: number;
-        limit: number;
-        totalPages: number;
-    };
-}
-
-
 class ClassService {
     private baseUrl = '/classes';
 
     // Get list of classes with optional filtering
-    async list(): Promise<IClassListResponse> {
+    async list(): Promise<any> {
         const api = getApiClient();
         const schoolId = getSchoolId();
 

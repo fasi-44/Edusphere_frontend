@@ -5,6 +5,7 @@
  */
 
 import pdfMake from 'pdfmake/build/pdfmake';
+import QRCode from 'qrcode';
 import {
     loadPdfFonts,
     formatDate,
@@ -28,6 +29,9 @@ export interface StudentIDCardData {
 
     // Academic Information
     academic_year: string;
+
+    // QR Code — encodes student identity for bus-staff scanning
+    qr_data?: string;  // JSON string: {"student_id": X, "school": "SKL001"}
 }
 
 /**
@@ -51,8 +55,18 @@ export const generateStudentIDCardPdf = async (
         issue_date,
         valid_until,
         emergency_contact,
-        academic_year,
+        qr_data,
     } = data;
+
+    // Generate QR code as base64 PNG data URL if qr_data is provided
+    let qrCodeDataUrl: string | null = null;
+    if (qr_data) {
+        qrCodeDataUrl = await QRCode.toDataURL(qr_data, {
+            width: 80,
+            margin: 1,
+            color: { dark: '#000000', light: '#ffffff' },
+        });
+    }
 
     // ID Card dimensions (standard CR80 size: 85.6mm x 53.98mm converted to points)
     // Using A4 landscape and centering the cards
@@ -146,25 +160,41 @@ export const generateStudentIDCardPdf = async (
                             ],
                             margin: [5, 0, 5, 5]
                         },
-                        // Footer
+                        // Footer row: valid-until + QR code
                         {
-                            table: {
-                                widths: ['*'],
-                                body: [[
-                                    {
-                                        stack: [
+                            columns: [
+                                {
+                                    width: '*',
+                                    table: {
+                                        widths: ['*'],
+                                        body: [[
                                             {
-                                                text: `Valid Until: ${formatDate(valid_until)}`,
-                                                fontSize: 6,
-                                                alignment: 'center',
-                                                color: '#666666'
+                                                stack: [
+                                                    {
+                                                        text: `Valid Until: ${formatDate(valid_until)}`,
+                                                        fontSize: 6,
+                                                        color: '#666666'
+                                                    }
+                                                ],
+                                                margin: [5, 4, 0, 4]
                                             }
-                                        ],
-                                        margin: 2
-                                    }
-                                ]]
-                            },
-                            layout: 'noBorders'
+                                        ]]
+                                    },
+                                    layout: 'noBorders'
+                                },
+                                ...(qrCodeDataUrl ? [{
+                                    width: 42,
+                                    stack: [
+                                        {
+                                            image: qrCodeDataUrl,
+                                            width: 36,
+                                            height: 36,
+                                            margin: [0, 2, 4, 2]
+                                        }
+                                    ]
+                                }] : [])
+                            ],
+                            margin: [0, 0, 0, 0]
                         }
                     ],
                     margin: 0

@@ -165,7 +165,7 @@ export const generateBonafideCertificatePdf = async (
         pageSize: 'A4',
         pageOrientation: 'portrait',
         pageMargins: [60, 140, 60, 60],
-        header: (currentPage: number, pageCount: number) => {
+        header: () => {
             return getReportHeader(
                 schoolData,
                 'Bonafide Certificate',

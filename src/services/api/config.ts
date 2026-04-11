@@ -123,6 +123,19 @@ export const API_ENDPOINTS = {
         UPDATE: (skid: string, yearId: string) => `/academic-years/update/${skid}/${yearId}`,
         SET_CURRENT: (skid: string, yearId: string) => `/academic-years/patch/${skid}/${yearId}/set-current`,
     },
+    STAFF: {
+        CREATE: (skid: string) => `/staff/create/${skid}`,
+        LIST: (skid: string) => `/staff/list/${skid}`,
+    },
+    BUS_SCAN: {
+        SCAN: (skid: string) => `/bus-scan/scan/${skid}`,
+        SCAN_QR: (skid: string) => `/bus-scan/scan-qr/${skid}`,
+        TODAY: (skid: string) => `/bus-scan/today/${skid}`,
+        STATUS: (skid: string) => `/bus-scan/status/${skid}`,
+        STUDENT_HISTORY: (skid: string, studentUserId: number) =>
+            `/bus-scan/student/${skid}/${studentUserId}`,
+        SEARCH_STUDENTS: (skid: string) => `/bus-scan/search-students/${skid}`,
+    },
     ASSIGNMENTS: {
         TEACHER_CLASSES: '/assignments/teacher-classes',
         CREATE: '/assignments/create',

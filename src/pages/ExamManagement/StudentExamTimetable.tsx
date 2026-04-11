@@ -131,6 +131,7 @@ const StudentExamTimetable: FC = () => {
                         ...e,
                         room: e.room || undefined,
                         invigilator_name: e.invigilator_name || undefined,
+                        seat_label: e.seat_label || undefined,
                     })),
                 },
                 getSchoolData(),

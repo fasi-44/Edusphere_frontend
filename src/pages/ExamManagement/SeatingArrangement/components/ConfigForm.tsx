@@ -40,7 +40,7 @@ const ConfigForm: FC<ConfigFormProps> = ({ isOpen, onClose, onSaved, editingConf
     const [teachers, setTeachers] = useState<any[]>([]);
     const [sectionsByClass, setSectionsByClass] = useState<Record<string, any[]>>({});
     const [examSlots, setExamSlots] = useState<any[]>([]);
-    const [loadingDropdowns, setLoadingDropdowns] = useState(false);
+    const [, setLoadingDropdowns] = useState(false);
 
     const isEditing = !!editingConfig;
     const isGenerated = editingConfig?.is_generated ?? false;
@@ -129,7 +129,8 @@ const ConfigForm: FC<ConfigFormProps> = ({ isOpen, onClose, onSaved, editingConf
         [rooms, formData.room_id]
     );
 
-    const totalRoomCols = useMemo(
+    // Computed for side-effect of memoization; intentionally unread.
+    void useMemo(
         () => selectedRoom ? getTotalColumns(selectedRoom.seating_layout || []) : 0,
         [selectedRoom]
     );
@@ -153,7 +154,7 @@ const ConfigForm: FC<ConfigFormProps> = ({ isOpen, onClose, onSaved, editingConf
             updated[index].columns = [];
             if (value) loadSectionsForClass(value);
         }
-        if (field === 'room_id') {
+        if ((field as string) === 'room_id') {
             // reset all columns when room changes
             updated.forEach(a => { a.columns = []; });
         }

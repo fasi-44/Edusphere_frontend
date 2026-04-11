@@ -356,7 +356,7 @@ export const generateFeeReceiptPdf = async (
         pageSize: 'A4',
         pageOrientation: 'portrait',
         pageMargins: [40, 140, 40, 60],
-        header: (currentPage: number, pageCount: number) => {
+        header: () => {
             return getReportHeader(schoolData, receiptTitle, feeName, 'portrait');
         },
         footer: (currentPage: number, pageCount: number) => {
@@ -400,7 +400,6 @@ export const generateFeeSummaryReceiptPdf = async (
         sectionName,
         feeName,
         totalAmount,
-        paidAmount,
         balanceAmount,
         installmentPayments,
     } = data;
@@ -547,7 +546,7 @@ export const generateFeeSummaryReceiptPdf = async (
         pageSize: 'A4',
         pageOrientation: 'portrait',
         pageMargins: [40, 140, 40, 60],
-        header: (currentPage: number, pageCount: number) => {
+        header: () => {
             return getReportHeader(schoolData, 'Installment Payment Summary', `Fee: ${feeName}`, 'portrait');
         },
         footer: (currentPage: number, pageCount: number) => {

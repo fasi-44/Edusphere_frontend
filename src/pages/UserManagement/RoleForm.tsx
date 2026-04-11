@@ -110,6 +110,13 @@ const PERMISSION_GROUPS = [
             { key: 'manage_school_settings', label: 'Manage School Settings' },
         ],
     },
+    {
+        module: 'Bus Scan',
+        permissions: [
+            { key: 'view_bus_scan', label: 'View Bus Scan' },
+            { key: 'manage_bus_scan', label: 'Scan QR & Manage Bus Scan' },
+        ],
+    },
 ];
 
 const RoleForm: FC = () => {

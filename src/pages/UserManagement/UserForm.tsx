@@ -14,11 +14,13 @@ import {
     FormSelect,
     LoadingSpinner,
 } from '../../components';
-import { userService } from '../../services/modules/userService';
+import { staffService } from '../../services/modules/staffService';
 import { roleService } from '../../services/modules/roleService';
+import { useAuthStore } from '../../stores/authStore';
 import { IUser } from '../../types/index';
 
 interface IFormData {
+    username: string;
     first_name: string;
     last_name: string;
     email: string;
@@ -37,6 +39,7 @@ const UserForm: FC = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const isEditMode = Boolean(id);
+    const { user: authUser } = useAuthStore();
 
     // State
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
@@ -46,6 +49,7 @@ const UserForm: FC = () => {
 
     // Form state
     const [formData, setFormData] = useState<IFormData>({
+        username: '',
         first_name: '',
         last_name: '',
         email: '',
@@ -60,7 +64,8 @@ const UserForm: FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [roles, setRoles] = useState<{ label: string; value: string }[]>([]);
 
-    const EXCLUDED_ROLES = ['STUDENT', 'PARENT', 'TEACHER'];
+    // Exclude roles that have their own dedicated creation forms
+    const EXCLUDED_ROLES = ['STUDENT', 'PARENT', 'TEACHER', 'SUPER_ADMIN'];
 
     // Fetch roles for dropdown
     useEffect(() => {
@@ -87,9 +92,11 @@ const UserForm: FC = () => {
             const fetchUser = async () => {
                 setLoading(true);
                 try {
+                    const { userService } = await import('../../services/modules/userService');
                     const user = await userService.getById(id);
                     setSelectedUser(user);
                     setFormData({
+                        username: user.username || '',
                         first_name: user.first_name || '',
                         last_name: user.last_name || '',
                         email: user.email,
@@ -110,6 +117,15 @@ const UserForm: FC = () => {
     // Validate form
     const validateForm = (): boolean => {
         const newErrors: IFormErrors = {};
+
+        // Username validation
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
+        } else if (formData.username.length < 3) {
+            newErrors.username = 'Username must be at least 3 characters';
+        } else if (!/^[a-z0-9_]+$/.test(formData.username)) {
+            newErrors.username = 'Username can only contain lowercase letters, numbers and underscores';
+        }
 
         // First name validation
         if (!formData.first_name.trim()) {
@@ -168,10 +184,21 @@ const UserForm: FC = () => {
     // Handle input change
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+
+        setFormData((prev) => {
+            const updated = { ...prev, [name]: value };
+
+            // Auto-generate username from first+last name (only if username hasn't been manually edited)
+            if (!isEditMode && (name === 'first_name' || name === 'last_name')) {
+                const first = (name === 'first_name' ? value : prev.first_name).toLowerCase().trim().replace(/\s+/g, '_');
+                const last = (name === 'last_name' ? value : prev.last_name).toLowerCase().trim().replace(/\s+/g, '_');
+                if (first || last) {
+                    updated.username = [first, last].filter(Boolean).join('_');
+                }
+            }
+
+            return updated;
+        });
 
         // Clear error for this field
         if (errors[name]) {
@@ -195,12 +222,15 @@ const UserForm: FC = () => {
 
         try {
             const submitData: any = {
+                username: formData.username,
                 first_name: formData.first_name,
                 last_name: formData.last_name,
                 email: formData.email,
                 phone: formData.phone || null,
-                role: formData.role,
+                role: formData.role.toUpperCase(),
                 status: formData.status,
+                skid: authUser?.skid,
+                school_id: authUser?.school_id,
             };
 
             if (!isEditMode) {
@@ -208,11 +238,18 @@ const UserForm: FC = () => {
             }
 
             if (isEditMode && id) {
+                const { userService } = await import('../../services/modules/userService');
                 await userService.update(id, submitData);
                 toast.success('User updated successfully');
-            } else {
+            } else if (submitData.role === 'SCHOOL_ADMIN') {
+                // SCHOOL_ADMIN uses the existing dedicated endpoint
+                const { userService } = await import('../../services/modules/userService');
                 await userService.create(submitData);
-                toast.success('User created successfully');
+                toast.success('School admin created successfully');
+            } else {
+                // All other staff roles (PRINCIPAL, BUS_STAFF, etc.)
+                await staffService.create(submitData);
+                toast.success('Staff member created successfully');
             }
             setTimeout(() => navigate('/users'), 1500);
         } catch (err: any) {
@@ -254,11 +291,11 @@ const UserForm: FC = () => {
         <div className="space-y-6">
             {/* Page Header */}
             <PageHeader
-                title={isEditMode ? 'Edit User' : 'Add New User'}
+                title={isEditMode ? 'Edit Staff Member' : 'Add New Staff Member'}
                 subtitle={
                     isEditMode
                         ? `Update details for ${selectedUser?.name}`
-                        : 'Create a new user account'
+                        : 'Create a new school staff account (Principal, Bus Staff, etc.)'
                 }
                 breadcrumbs={[
                     { label: 'Dashboard', href: '/dashboard' },
@@ -276,7 +313,7 @@ const UserForm: FC = () => {
                             Account Information
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Full Name */}
+                            {/* First Name */}
                             <FormField
                                 label="First Name"
                                 required
@@ -304,6 +341,24 @@ const UserForm: FC = () => {
                                     onChange={handleInputChange}
                                     placeholder="Enter Last full name"
                                     error={Boolean(errors.last_name)}
+                                    required
+                                />
+                            </FormField>
+
+                            {/* Username */}
+                            <FormField
+                                label="Username"
+                                required
+                                error={errors.username}
+                                help="Auto-generated from name — you can edit it"
+                            >
+                                <FormInput
+                                    name="username"
+                                    type="text"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    placeholder="e.g. john_doe"
+                                    error={Boolean(errors.username)}
                                     required
                                 />
                             </FormField>

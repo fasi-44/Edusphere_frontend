@@ -6,23 +6,13 @@
 import { getApiClient, getSchoolId } from '../api/client';
 import { ISubject } from '../../types/index';
 
-interface ISubjectListResponse {
-    data: ISubject[];
-    meta?: {
-        total: number;
-        page: number;
-        limit: number;
-        totalPages: number;
-    };
-}
-
 class SubjectService {
     private baseUrl = '/subjects';
 
     /**
      * Get all subjects across all classes
      */
-    async listAll(): Promise<ISubjectListResponse> {
+    async listAll(): Promise<any> {
         const api = getApiClient();
         const schoolId = getSchoolId();
 
@@ -37,7 +27,7 @@ class SubjectService {
     /**
      * Get list of subjects for a specific class
      */
-    async listByClass(classId: string): Promise<ISubjectListResponse> {
+    async listByClass(classId: string): Promise<any> {
         const api = getApiClient();
         const schoolId = getSchoolId();
 

@@ -6,10 +6,28 @@
 import axios, {
     AxiosInstance,
     AxiosError,
+    AxiosRequestConfig,
     InternalAxiosRequestConfig,
     AxiosResponse,
 } from 'axios';
 import { API_CONFIG, API_ENDPOINTS } from './config';
+
+/**
+ * Typed API client wrapper.
+ * Because the response interceptor returns `response.data` directly, the
+ * effective return type of every HTTP method is the unwrapped backend payload
+ * (not an AxiosResponse). We expose a thin interface that reflects this so
+ * service code can read fields like `response.code`, `response.data`, etc.
+ * without TypeScript thinking they are AxiosResponse instances.
+ */
+export interface ApiClient {
+    get: <T = any>(url: string, config?: AxiosRequestConfig) => Promise<T>;
+    post: <T = any>(url: string, data?: unknown, config?: AxiosRequestConfig) => Promise<T>;
+    put: <T = any>(url: string, data?: unknown, config?: AxiosRequestConfig) => Promise<T>;
+    patch: <T = any>(url: string, data?: unknown, config?: AxiosRequestConfig) => Promise<T>;
+    delete: <T = any>(url: string, config?: AxiosRequestConfig) => Promise<T>;
+    request: <T = any>(config: AxiosRequestConfig) => Promise<T>;
+}
 
 /**
  * API Error Response Type
@@ -184,13 +202,15 @@ const forceLogout = (): void => {
 };
 
 /**
- * Get existing API client or create new one
+ * Get existing API client or create new one.
+ * Returned as ApiClient so that service code sees method results as the
+ * unwrapped backend payload (response.data) rather than an AxiosResponse.
  */
-export const getApiClient = (): AxiosInstance => {
+export const getApiClient = (): ApiClient => {
     if (!apiClient) {
-        return createApiClient();
+        createApiClient();
     }
-    return apiClient;
+    return apiClient as unknown as ApiClient;
 };
 
 /**
@@ -198,9 +218,9 @@ export const getApiClient = (): AxiosInstance => {
  */
 export const setAuthToken = (token: string): void => {
     localStorage.setItem('authToken', token);
-    const client = getApiClient();
-    if (client.defaults.headers.common) {
-        client.defaults.headers.common.Authorization = `Bearer ${token}`;
+    getApiClient(); // ensure instance is initialized
+    if (apiClient && apiClient.defaults.headers.common) {
+        apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
     }
 };
 
@@ -211,9 +231,9 @@ export const clearAuthToken = (): void => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('loggedUser');
-    const client = getApiClient();
-    if (client.defaults.headers.common) {
-        delete client.defaults.headers.common.Authorization;
+    getApiClient(); // ensure instance is initialized
+    if (apiClient && apiClient.defaults.headers.common) {
+        delete apiClient.defaults.headers.common.Authorization;
     }
 };
 

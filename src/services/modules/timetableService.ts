@@ -7,16 +7,6 @@
 import { getApiClient, getSchoolId } from '../api/client';
 import { ITimetable } from '../../types/index';
 
-interface ITimetableListResponse {
-    data: ITimetable[];
-    meta: {
-        total: number;
-        page: number;
-        limit: number;
-        totalPages: number;
-    };
-}
-
 interface ICreateTimetableRequest {
     classId: string;
     academicYear: string;
@@ -57,7 +47,7 @@ class TimetableService {
     /**
      * Get list of timetables with optional filtering
      */
-    async list(academicyearId: number): Promise<ITimetableListResponse> {
+    async list(academicyearId: number): Promise<any> {
         const api = getApiClient();
         const schoolId = getSchoolId();
 
@@ -335,7 +325,7 @@ class TimetableService {
         start_time: string;
         end_time: string;
         academic_year_id: string;
-        semester: number;
+        semester: number | string;
         exclude_timetable_id?: string;
     }): Promise<any> {
         const api = getApiClient();
@@ -355,7 +345,7 @@ class TimetableService {
         class_id: string;
         section_id: string;
         academic_year_id: string;
-        semester: number;
+        semester: number | string;
         entries: Record<string, any>;
         exclude_timetable_id?: string;
     }): Promise<any> {

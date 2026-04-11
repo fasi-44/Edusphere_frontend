@@ -131,6 +131,15 @@ const allMenuItems: NavItem[] = [
             { name: "My Syllabus Progress", path: "/syllabus/my-progress", pro: false },
         ],
     },
+    // Bus Management (SchoolAdmin, Principal, Bus Staff)
+    {
+        icon: <TaskIcon />,
+        name: "Bus Management",
+        subItems: [
+            { name: "Scan QR Code", path: "/bus-scan/scan", pro: false },
+            { name: "Tracking Report", path: "/bus-scan/report", pro: false },
+        ],
+    },
     // Finance Management (SchoolAdmin)
     {
         icon: <GridIcon />,

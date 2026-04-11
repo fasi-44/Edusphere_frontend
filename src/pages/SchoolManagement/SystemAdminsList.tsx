@@ -82,7 +82,7 @@ const SystemAdminsList: FC = () => {
       const identifier = formData.identifier.trim();
       const isEmail = identifier.includes('@');
 
-      const payload: Record<string, string> = {
+      const payload: { username?: string; email?: string; password: string } = {
         password: formData.password,
       };
 

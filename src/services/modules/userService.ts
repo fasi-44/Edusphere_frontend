@@ -119,7 +119,7 @@ class UserService {
             throw new Error('School ID not found. Please log in again.');
         }
 
-        const response = (await api.post(`${this.baseUrl}/create/${schoolId}`, data)) as ApiResponse;
+        const response = (await api.post(`${this.baseUrl}/create`, data)) as ApiResponse;
         if (response.code === 200 && response.status === 'success') {
             return (response.user || response.data) as IUser;
         }

@@ -9,7 +9,6 @@ import {
     LoginRequest,
     LoginResponse,
     LogoutResponse,
-    RefreshTokenRequest,
     RefreshTokenResponse,
     ForgotPasswordRequest,
     ForgotPasswordResponse,

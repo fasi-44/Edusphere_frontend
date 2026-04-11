@@ -7,7 +7,7 @@ import { LoadingSpinner } from '../components';
  */
 export function lazyLoad<T extends ComponentType<any>>(
     importFunc: () => Promise<{ default: T }>,
-    fallback?: React.ReactNode
+    _fallback?: React.ReactNode
 ): LazyExoticComponent<T> {
     const LazyComponent = lazy(importFunc);
 
